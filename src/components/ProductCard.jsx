@@ -7,6 +7,8 @@ const ProductCard = ({ product }) => {
     const [showModal, setShowModal] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
+    const [showImageModal, setShowImageModal] = useState(false);
+
     const handleOpenModal = () => {
         setQuantity(1);
         setShowModal(true);
@@ -38,7 +40,8 @@ const ProductCard = ({ product }) => {
                         <img
                             src={imageUrl}
                             alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            onClick={() => setShowImageModal(true)}
                             onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/300?text=Sin+Imagen'; }}
                         />
                     ) : (
@@ -156,6 +159,29 @@ const ProductCard = ({ product }) => {
                                 <Check size={16} /> Confirmar
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Image Zoom Modal */}
+            {showImageModal && imageUrl && (
+                <div
+                    className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    onClick={() => setShowImageModal(false)}
+                >
+                    <div className="relative max-w-4xl w-full max-h-[90vh] flex items-center justify-center">
+                        <button
+                            onClick={() => setShowImageModal(false)}
+                            className="absolute -top-10 right-0 text-white hover:text-gray-300"
+                        >
+                            <X size={32} />
+                        </button>
+                        <img
+                            src={imageUrl}
+                            alt={product.name}
+                            className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        />
                     </div>
                 </div>
             )}

@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
         }
     }, []);
 
-    // Sync with backend on login
+    // Sync with backend on login / Clear on logout
     useEffect(() => {
         const syncCart = async () => {
             if (user) {
@@ -46,11 +46,17 @@ export const CartProvider = ({ children }) => {
 
         if (user) {
             syncCart();
+        } else {
+            // User logged out: Clear cart
+            setCartItems([]);
+            localStorage.removeItem('cart');
         }
     }, [user]);
 
     // Save to localStorage whenever cart changes
     useEffect(() => {
+        // Only save to local storage if there are items or if we want to persist empty state
+        // But we just cleared it on logout, so this might re-save empty array. That's fine.
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
 
@@ -69,18 +75,18 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    const addToCart = (product) => {
+    const addToCart = (product, quantity = 1) => {
         setCartItems((prevItems) => {
             const existingItem = prevItems.find((item) => item._id === product._id);
             let newItems;
             if (existingItem) {
                 newItems = prevItems.map((item) =>
                     item._id === product._id
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             } else {
-                newItems = [...prevItems, { ...product, quantity: 1 }];
+                newItems = [...prevItems, { ...product, quantity }];
             }
             updateBackendCart(newItems);
             return newItems;
