@@ -47,6 +47,30 @@ const CatalogPage = () => {
         fetchProducts();
     };
 
+    const handleClearFilters = () => {
+        setSearch('');
+        setCategory('');
+        setMinPrice('');
+        setMaxPrice('');
+        // We need to trigger fetchProducts with empty filters. 
+        // Since fetchProducts reads from state which might not be updated yet, 
+        // we can pass empty filters directly or rely on a separate useEffect if we had one.
+        // But fetchProducts uses current state variables. 
+        // To ensure it uses cleared values, we can pass them as arguments or modify fetchProducts.
+        // A cleaner way given current structure is to call getAllProducts directly here or modify fetchProducts to accept overrides.
+        // Let's modify fetchProducts to accept optional filters, otherwise it uses state.
+        // Actually, simpler: just set state and call a version that takes args, 
+        // OR just reload the page/component? No, that's bad UX.
+
+        // Let's refactor fetchProducts slightly to accept params, or just call service directly here.
+        // Calling service directly is safest to ensure "clean" fetch.
+        setLoading(true);
+        productService.getAllProducts({})
+            .then(data => setProducts(data))
+            .catch(error => console.error('Error clearing filters:', error))
+            .finally(() => setLoading(false));
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8">
@@ -102,12 +126,21 @@ const CatalogPage = () => {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        className="w-full md:w-auto bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Filtrar
-                    </button>
+                    <div className="flex space-x-2 w-full md:w-auto">
+                        <button
+                            type="submit"
+                            className="flex-1 md:flex-none bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Filtrar
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleClearFilters}
+                            className="flex-1 md:flex-none bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        >
+                            Limpiar
+                        </button>
+                    </div>
                 </form>
             </div>
 
