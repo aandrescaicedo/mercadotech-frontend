@@ -31,7 +31,7 @@ import axios from 'axios';
  * URL base de la API de autenticación
  * En producción, esto vendría de una variable de entorno
  */
-const API_URL = 'http://localhost:5000/api/v1/auth';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/v1/auth`;
 
 /**
  * Registrar nuevo usuario
