@@ -31,10 +31,11 @@
  * - /categories → CategoryManagementPage (privado, ADMIN)
  */
 
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, Outlet, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider, CartContext } from './context/CartContext';
 import { useContext } from 'react';
+import { ShoppingBag } from 'lucide-react';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CreateStorePage from './pages/CreateStorePage';
@@ -65,6 +66,7 @@ const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const { getCartCount } = useContext(CartContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = () => {
         if (window.confirm("¿Estás seguro que deseas salir de MercadoTech?")) {
@@ -73,62 +75,107 @@ const Navbar = () => {
         }
     };
 
+    // Helper para crear enlaces con estado activo
+    const NavLink = ({ to, children, className = "" }) => {
+        const isActive = location.pathname === to;
+        return (
+            <Link
+                to={to}
+                className={`
+                    px-3 py-2 rounded-lg font-medium transition-all duration-200
+                    ${isActive
+                        ? 'bg-indigo-50 text-indigo-700 shadow-sm'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600'
+                    }
+                    ${className}
+                `}
+            >
+                {children}
+            </Link>
+        );
+    };
+
     return (
-        <nav className="bg-white shadow-sm">
+        <nav className="bg-white shadow-sm border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     {/* Logo */}
-                    <div className="flex">
-                        <Link to={user ? "/catalog" : "/"} className="flex-shrink-0 flex items-center text-xl font-bold text-indigo-600">
-                            MercadoTech
+                    <div className="flex items-center">
+                        <Link to={user ? "/catalog" : "/"} className="flex items-center space-x-2 group">
+                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow duration-200">
+                                <ShoppingBag className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                MercadoTech
+                            </span>
                         </Link>
                     </div>
 
                     {/* Links de navegación */}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
                         {/* Catálogo */}
-                        <Link to="/catalog" className="text-gray-700 hover:text-indigo-600">Catálogo</Link>
+                        <NavLink to="/catalog">Catálogo</NavLink>
 
                         {/* Mis Pedidos - Solo para clientes autenticados */}
                         {user && user.role === 'CLIENT' && (
-                            <Link to="/my-orders" className="text-gray-700 hover:text-indigo-600">Mis Pedidos</Link>
+                            <NavLink to="/my-orders">Mis Pedidos</NavLink>
                         )}
 
-                        {/* Carrito con contador - Siempre visible */}
-                        <Link to="/cart" className="text-gray-700 hover:text-indigo-600 relative">
+                        {/* Carrito con contador */}
+                        <NavLink to="/cart" className="relative">
                             Carrito
-                            <span className="ml-1 bg-indigo-600 text-white text-xs rounded-full px-2 py-0.5">
-                                {getCartCount()}
-                            </span>
-                        </Link>
+                            {getCartCount() > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md">
+                                    {getCartCount()}
+                                </span>
+                            )}
+                        </NavLink>
 
                         {/* Opciones según autenticación */}
                         {user ? (
                             <>
-                                {/* Email del usuario */}
-                                <span className="text-gray-700 text-sm">Hola, {user.email}</span>
-
                                 {/* Mi Tienda - Solo para STORE */}
                                 {user.role === 'STORE' && (
-                                    <Link to="/store-dashboard" className="text-gray-700 hover:text-indigo-600">Mi Tienda</Link>
+                                    <NavLink to="/store-dashboard">Mi Tienda</NavLink>
                                 )}
 
                                 {/* Panel Admin - Solo para ADMIN */}
                                 {user.role === 'ADMIN' && (
                                     <>
-                                        <Link to="/admin" className="text-purple-600 hover:text-purple-800 font-semibold">Tiendas</Link>
-                                        <Link to="/categories" className="text-purple-600 hover:text-purple-800 font-semibold">Categorías</Link>
+                                        <NavLink to="/admin">Tiendas</NavLink>
+                                        <NavLink to="/categories">Categorías</NavLink>
                                     </>
                                 )}
 
+                                {/* Email del usuario */}
+                                <span className="text-sm text-gray-600 px-3 py-2">
+                                    Hola, <span className="font-medium text-gray-900">{user.email.split('@')[0]}</span>
+                                </span>
+
                                 {/* Botón de Salir */}
-                                <button onClick={handleLogout} className="text-red-600 hover:text-red-800 text-sm">Salir</button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-105"
+                                >
+                                    Salir
+                                </button>
                             </>
                         ) : (
                             <>
-                                {/* Login y Registro - Solo si no autenticado */}
-                                <Link to="/login" className="text-gray-700 hover:text-indigo-600">Ingresar</Link>
-                                <Link to="/register" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Registrarse</Link>
+                                {/* Login */}
+                                <Link
+                                    to="/login"
+                                    className="px-4 py-2 text-gray-700 hover:text-indigo-600 font-medium rounded-lg hover:bg-gray-50 transition-all duration-200"
+                                >
+                                    Ingresar
+                                </Link>
+                                {/* Registro */}
+                                <Link
+                                    to="/register"
+                                    className="px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                                >
+                                    Registrarse
+                                </Link>
                             </>
                         )}
                     </div>
