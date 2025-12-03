@@ -22,12 +22,12 @@ import { test, expect } from '@playwright/test';
 test.describe('Flujo de Autenticación Completo', () => {
     const testUser = {
         email: `test${Date.now()}@example.com`,
-        password: 'test Password123'
-    role: 'CLIENT'
+        password: 'testPassword123',
+        role: 'CLIENT'
     };
 
     test('debe completar ciclo: registro → login → logout', async ({ page }) => {
-        // 1. REGISTRO -Navegar a página de registro
+        // 1. REGISTRO - Navegar a página de registro
         await page.goto('/register');
         await expect(page).toHaveTitle(/MercadoTech/i);
 
