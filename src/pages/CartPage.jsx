@@ -9,7 +9,7 @@ const CartPage = () => {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h2>
-                <Link to="/" className="text-indigo-600 hover:text-indigo-500">
+                <Link to="/catalog" className="text-indigo-600 hover:text-indigo-500">
                     Continuar Comprando
                 </Link>
             </div>

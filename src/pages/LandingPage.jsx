@@ -24,12 +24,22 @@
  * - react-router-dom: Navegación
  */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingBag, TrendingUp, ShieldCheck, Zap, Globe, Smartphone, ArrowRight } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 
 const LandingPage = () => {
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate('/catalog');
+        }
+    }, [user, navigate]);
+
     return (
         <div className="min-h-screen bg-[#0f0c29] text-white overflow-hidden font-sans selection:bg-violet-500 selection:text-white">
             {/* 

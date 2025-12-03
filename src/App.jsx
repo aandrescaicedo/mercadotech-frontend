@@ -67,8 +67,10 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        logout();
-        navigate('/');
+        if (window.confirm("¿Estás seguro que deseas salir de MercadoTech?")) {
+            logout();
+            navigate('/');
+        }
     };
 
     return (
