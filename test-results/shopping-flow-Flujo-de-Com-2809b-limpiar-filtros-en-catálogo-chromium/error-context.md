@@ -1,0 +1,64 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "MercadoTech" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+        - generic [ref=e13]: MercadoTech
+      - generic [ref=e14]:
+        - link "Catálogo" [ref=e15] [cursor=pointer]:
+          - /url: /catalog
+        - link "Carrito" [ref=e16] [cursor=pointer]:
+          - /url: /cart
+        - link "Ingresar" [ref=e17] [cursor=pointer]:
+          - /url: /login
+        - link "Registrarse" [ref=e18] [cursor=pointer]:
+          - /url: /register
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - img [ref=e24]
+      - heading "Únete a MercadoTech" [level=2] [ref=e27]
+      - paragraph [ref=e28]: Crea tu cuenta y comienza a vender o comprar
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]: Correo Electrónico
+        - generic [ref=e33]:
+          - generic:
+            - img
+          - textbox "Correo Electrónico" [ref=e34]:
+            - /placeholder: tu@email.com
+            - text: shopper1764813496178@example.com
+      - generic [ref=e35]:
+        - generic [ref=e36]: Contraseña
+        - generic [ref=e37]:
+          - generic:
+            - img
+          - textbox "Contraseña" [ref=e38]:
+            - /placeholder: ••••••••
+            - text: shopperPass123
+      - generic [ref=e39]:
+        - generic [ref=e40]: Tipo de Cuenta
+        - generic [ref=e41]:
+          - generic:
+            - img
+          - combobox "Tipo de Cuenta" [ref=e42] [cursor=pointer]:
+            - option "Cliente - Comprar productos" [selected]
+            - option "Vendedor - Crear mi tienda"
+          - generic:
+            - img
+      - generic [ref=e43]: Error al registrarse
+      - button "Crear Cuenta" [active] [ref=e45] [cursor=pointer]:
+        - text: Crear Cuenta
+        - img [ref=e46]
+      - generic [ref=e52]: O regístrate con
+      - button "Continuar con Google" [ref=e54] [cursor=pointer]:
+        - img [ref=e55]
+        - generic [ref=e60]: Continuar con Google
+      - paragraph [ref=e62]:
+        - text: ¿Ya tienes cuenta?
+        - link "Inicia sesión" [ref=e63] [cursor=pointer]:
+          - /url: /login
+```

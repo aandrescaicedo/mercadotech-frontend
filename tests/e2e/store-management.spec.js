@@ -1,8 +1,7 @@
 /**
- * Test E2E: Flujo de Gestión de Tienda
-
+ * Test E2E: Flujo de Gestion de Tienda
  * 
- * Propósito:
+ * Proposito:
  * Verificar el flujo completo de un vendedor gestionando su tienda
  * 
  * Dependencias:
@@ -21,7 +20,7 @@
 
 import { test, expect } from '@playwright/test';
 
-test.describe('Flujo de Gestión de Tienda', () => {
+test.describe('Flujo de Gestion de Tienda', () => {
     const storeUser = {
         email: `store${Date.now()}@example.com`,
         password: 'storePass123',
@@ -39,7 +38,7 @@ test.describe('Flujo de Gestión de Tienda', () => {
         await page.waitForURL('/catalog');
     });
 
-    test('debe completar gestión: crear tienda → agregar producto → editar', async ({ page }) => {
+    test('debe completar gestion: crear tienda -> agregar producto -> editar', async ({ page }) => {
         // 1. CREAR TIENDA (si no existe)
         await page.click('a:has-text("Mi Tienda")');
 
@@ -49,7 +48,7 @@ test.describe('Flujo de Gestión de Tienda', () => {
         if (!hasStore) {
             // Llenar formulario de crear tienda
             await page.fill('input[name="name"]', 'Tienda de Prueba E2E');
-            await page.fill('textarea[name="description"]', 'Descripción de prueba');
+            await page.fill('textarea[name="description"]', 'Descripcion de prueba');
             await page.click('button[type="submit"]');
 
             await page.waitForTimeout(1000);
@@ -64,7 +63,7 @@ test.describe('Flujo de Gestión de Tienda', () => {
 
         const testProduct = {
             name: `Producto Test ${Date.now()}`,
-            description: 'Descripción de prueba E2E',
+            description: 'Descripcion de prueba E2E',
             price: '99.99',
             stock: '20'
         };
@@ -74,7 +73,7 @@ test.describe('Flujo de Gestión de Tienda', () => {
         await page.fill('input[name="price"]', testProduct.price);
         await page.fill('input[name="stock"]', testProduct.stock);
 
-        // Seleccionar categoría (primera disponible)
+        // Seleccionar categoria (primera disponible)
         await page.selectOption('select[name="category"]', { index: 1 });
 
         await page.click('button[type="submit"]');
@@ -108,10 +107,10 @@ test.describe('Flujo de Gestión de Tienda', () => {
         await page.goto('/store-dashboard');
         await page.click('button:has-text("Agregar Producto")');
 
-        // Intentar enviar formulario vacío
+        // Intentar enviar formulario vacio
         await page.click('button[type="submit"]');
 
-        // Verificar validación HTML5 o mensajes de error
+        // Verificar validacion HTML5 o mensajes de error
         const nameInput = page.locator('input[name="name"]');
         await expect(nameInput).toHaveAttribute('required', '');
     });
